@@ -1,15 +1,16 @@
 {% extends 'base.html' %}
+
 {% block title %}
    Записи группы {{group.title}}
 {% endblock title %}
-{% block content %}
 
+{% block content %}
 <h1>{{group.title}}</h1>
 <p>{{group.description}}</p>
 
   <div class="container py-5">
     
-    {% for post in group.posts %}
+    {% for post in group.posts.all %}
 
     <article>
       <ul>

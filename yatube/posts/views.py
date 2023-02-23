@@ -37,7 +37,7 @@ def profile(request, username):
     page_obj = func_paginator(request, posts)
     context = {
         'page_obj': page_obj,
-        'user': user_selected,
+        'author': user_selected,
     }
     return render(request, 'posts/profile.html', context)
 

@@ -26,38 +26,26 @@ def group_posts(request, slug):
     page_obj = func_paginator(request, posts)
     context = {
         'group': group,
-        'page_obj': page_obj,
-        'posts': posts
-    }
+        'page_obj': page_obj, }
     return render(request, 'posts/group_list.html', context)
 
 
 def profile(request, username):
-    # Здесь код запроса к модели и создание словаря контекста
     user_selected = get_object_or_404(User,
                                       username=username)
     posts = Post.objects.filter(author__username=username)
-    post_count = posts.count()
-
     page_obj = func_paginator(request, posts)
     context = {
         'page_obj': page_obj,
         'user': user_selected,
-        'author': user_selected,
-        'post_count': post_count,
     }
     return render(request, 'posts/profile.html', context)
 
 
 def post_detail(request, post_id):
     post = get_object_or_404(Post, id=post_id)
-
-    posts = Post.objects.filter(author__username=post.author)
-    post_count = posts.count()
-
     context = {
         'post': post,
-        'post_count': post_count,
     }
     return render(request, 'posts/post_detail.html', context)
 
@@ -68,7 +56,8 @@ def post_edit(request, post_id):
     form = PostForm(request.POST, instance=post)
     context = {
         'form': form,
-        'post': post, }
+        'post': post,
+        'is_edit': True}
     if request.method == "POST":
         if form.is_valid():
             post.save()

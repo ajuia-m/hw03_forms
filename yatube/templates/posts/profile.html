@@ -3,11 +3,11 @@
 {% block title %}
 Профайл пользователя {{user.first_name}} {{user.last_name}}
 {% endblock title %}
-<div class="container py-5">
+
 {% block content %}
 <h1>Все посты пользователя {{user.first_name}} {{user.last_name}} ({{user.username}})</h1> 
-<h3>Всего постов: {{ post_count }}</h3>
-{%comment%} {%endcomment%}
+<h3>Всего постов: {{ user.posts.count }}</h3>
+
 {% for post in page_obj %}
 <article>
     <ul>
@@ -22,7 +22,7 @@
         {{post.text}}
     </p>
     <a href="{% url 'posts:post_detail' post.pk %}">подробная информация о посте</a>     
-</article>
+
 {% if post.group %}   
         <a href="{% url 'posts:group_list' post.group.slug %}">
           Все записи группы - {{post.group}}
@@ -32,5 +32,5 @@
       {% if not forloop.last %}<hr>{% endif %}
     {% endfor %}
     {% include 'includes/paginator.html' %}
-    </div>
+
 {% endblock content %}

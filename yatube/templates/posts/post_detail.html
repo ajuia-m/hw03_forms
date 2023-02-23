@@ -6,8 +6,6 @@
 
 
 {%block content%}
-<main>
-<div class="container py-5">
     <div class="row">
         <aside class="col-12 col-md-3">
             <ul class="list-group list-group-flush">
@@ -31,7 +29,7 @@
               </li>
 
               <li class="list-group-item d-flex justify-content-between align-items-center">
-                Всего постов автора:  <span >{{ post_count }}</span>
+                Всего постов автора:  <span >{{ post.author.posts.count }}</span>
               </li>
 
               <li class="list-group-item">
@@ -54,7 +52,5 @@
             {% endif %}
             {% endif %}
         </article>
-    </div>     
-  </div>
-</main>
+    </div>
 {%endblock content%}

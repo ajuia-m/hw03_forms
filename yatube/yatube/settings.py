@@ -9,14 +9,12 @@ SECRET_KEY = os.getenv("SECRET_KEY", default="hxv!-7^jvq5d0j9p*h^by=@*=(*1fm+iv#
 
 DEBUG = True
 
-ALLOWED_HOSTS =  [
+ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     '[::1]',
     'testserver',
 ]
-
-
 
 INSTALLED_APPS = [
     'django.contrib.admin',

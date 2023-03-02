@@ -1,6 +1,8 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 
+LEN_TEXT = 15
+
 User = get_user_model()
 
 
@@ -33,7 +35,11 @@ class Post(models.Model):
 
     def __str__(self):
         str_text = ''
-        while len(str_text) <= 30:
+        if len(self.text) > 15:
+            while len(str_text) <= LEN_TEXT:
+                for char in self.text:
+                    str_text += char
+        else:
             for char in self.text:
                 str_text += char
         return str_text

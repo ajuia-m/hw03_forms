@@ -14,7 +14,6 @@ class PostPagesTests(TestCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.user = User.objects.create_user(username='SadStudent')
-        cls.other_user = User.objects.create_user(username="Someone")
         cls.group = Group.objects.create(
             title='Тестовая',
             slug='test',
@@ -50,7 +49,8 @@ class PostPagesTests(TestCase):
                 response = self.authorized_client.get(reverse_name)
                 self.assertTemplateUsed(response, template)
 
-    def post_show_on_pages(self, page_context):
+    def post_is_shown(self, page_context):
+        """Метод проверки контекста"""
         post_author = page_context.author
         post_group = page_context.group
         post_text = page_context.text
@@ -58,43 +58,39 @@ class PostPagesTests(TestCase):
         self.assertEqual(post_group, PostPagesTests.post.group)
         self.assertEqual(post_text, PostPagesTests.post.text)
 
-    def test_index_page_show_correct_context(self):
+    def test_index_has_correct_context(self):
         """Шаблон index сформирован с правильным контекстом."""
         response = (
-            self.authorized_client.get(reverse('posts:index'))
-        )
-        page_cont = response.context['page_obj'][0]
-        self.post_show_on_pages(page_cont)
+            self.authorized_client.get(reverse('posts:index')))
+        page_context = response.context['page_obj'][0]
+        self.post_is_shown(page_context)
 
-    def test_group_list_page_show_correct_context(self):
+    def test_group_list_has_correct_context(self):
         """Шаблон group_list сформирован с правильным контекстом"""
         response = self.authorized_client.get(
             reverse('posts:group_list',
-                    kwargs={'slug': PostPagesTests.group.slug})
-        )
+                    kwargs={'slug': PostPagesTests.group.slug}))
         post_group = response.context['group']
         self.assertEqual(post_group, PostPagesTests.group)
-        page_cont = response.context['page_obj'][0]
-        self.post_show_on_pages(page_cont)
+        page_context = response.context['page_obj'][0]
+        self.post_is_shown(page_context)
 
-    def test_profile_page_show_correct_context(self):
+    def test_profile_has_correct_context(self):
         """Шаблон Profile сформирован с правильным контекстом"""
         response = self.authorized_client.get(
             reverse('posts:profile',
-                    kwargs={'username': PostPagesTests.user.username})
-        )
+                    kwargs={'username': PostPagesTests.user.username}))
         profile_context = response.context
         post_profile = profile_context['author']
         self.assertEqual(post_profile, PostPagesTests.user)
-        page_cont = response.context['page_obj'][0]
-        self.post_show_on_pages(page_cont)
+        page_context = response.context['page_obj'][0]
+        self.post_is_shown(page_context)
 
     # Проверка словаря контекста страницы Create Post
-    def test_create_post_page_show_correct_context(self):
+    def test_create_has_correct_context(self):
         """Шаблон Create_Post сформирован с правильным контекстом"""
         response = self.authorized_client.get(
-            reverse('posts:post_create')
-        )
+            reverse('posts:post_create'))
         form_fields = {
             'text': forms.fields.CharField,
             'group': forms.fields.ChoiceField,
@@ -105,32 +101,29 @@ class PostPagesTests(TestCase):
                 self.assertIsInstance(form_field, expected)
 
     # Проверка словаря контекста страницы Edit Post
-    def test_edit_post_page_show_correct_context(self):
+    def test_editpost_has_correct_context(self):
         """Шаблон Edit_Post сформирован с правильным контекстом"""
         response = self.authorized_client.get(
             reverse('posts:post_edit',
-                    kwargs={'post_id': PostPagesTests.post.pk}
-                    )
-        )
+                    kwargs={'post_id': PostPagesTests.post.pk}))
         form_fields = {
             'text': forms.fields.CharField,
             'group': forms.fields.ChoiceField,
-        }
+            }
         for value, expected in form_fields.items():
             with self.subTest(value=value):
                 forms_field = response.context.get('form').fields[value]
                 self.assertIsInstance(forms_field, expected)
 
     # Проверка словаря контекста страницы Post Detail
-    def test_post_detail_page_show_correct_context(self):
+    def test_postdetail_has_correct_context(self):
         """Шаблон Post_Detail сформирован с правильным контекстом"""
+
         response = self.authorized_client.get(
             reverse('posts:post_detail',
-                    kwargs={'post_id': PostPagesTests.post.pk
-                            }
-                    )
-        )
+                    kwargs={'post_id': PostPagesTests.post.pk}))
+
         post_detail_context = response.context
         post_detail = post_detail_context['post']
         self.assertEqual(post_detail, PostPagesTests.post)
-        self.post_show_on_pages(post_detail)
+        self.post_is_shown(post_detail)

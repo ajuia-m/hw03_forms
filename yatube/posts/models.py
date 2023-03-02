@@ -33,9 +33,12 @@ class Post(models.Model):
         related_name='posts',
         verbose_name='Группа',)
 
+    class Meta:
+        ordering = ['pub_date']
+
     def __str__(self):
         str_text = ''
-        if len(self.text) > 15:
+        if len(self.text) > LEN_TEXT:
             while len(str_text) <= LEN_TEXT:
                 for char in self.text:
                     str_text += char
